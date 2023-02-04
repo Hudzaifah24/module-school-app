@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Jadwal pelajaran</title>
+        <meta name="author" content="David Grzyb">
+        <meta name="description" content="">
+
+        <!-- Tailwind -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.css"  rel="stylesheet" />
+        <style>
+            @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
+            .font-family-karla { font-family: karla; }
+            .bg-sidebar { background: #3d68ff; }
+            .cta-btn { color: #3d68ff; }
+            .upgrade-btn { background: #1947ee; }
+            .upgrade-btn:hover { background: #0038fd; }
+            .active-nav-link { background: #1947ee; }
+            .nav-item:hover { background: #1947ee; }
+            .account-link:hover { background: #3d68ff; }
+        </style>
+    </head>
+    <body class="bg-gray-100 font-family-karla flex">
+
+        <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
+            <div class="p-6">
+                <a href="index.html" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Mutiara Ihsan</a>
+                <button class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
+                    Admin
+                </button>
+            </div>
+            <nav class="text-white text-base font-semibold pt-3">
+                <a href="../dashboard.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                    <i class="fas fa-tachometer-alt mr-3"></i>
+                    Dashboard
+                </a>
+                <a href="../lessons/index.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                    <i class="fas fa-sticky-note mr-3"></i>
+                    Mata Pelajaran
+                </a>
+                <a href="./index.html" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
+                    <i class="fas fa-table mr-3"></i>
+                    Jadwal Pelajaran
+                </a>
+                <a href="../roles/index.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                    <i class="fas fa-align-left mr-3"></i>
+                    Rol
+                </a>
+                <a href="../users/index.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                    <i class="fas fa-user mr-3"></i>
+                    Pengguna
+                </a>
+                <a href="calendar.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                    <i class="fas fa-calendar mr-3"></i>
+                    Kalender
+                </a>
+            </nav>
+        </aside>
+    
+        <div class="relative w-full flex flex-col h-screen overflow-y-hidden">
+            <!-- Desktop Header -->
+            <header class="w-full items-center bg-white py-2 px-6 hidden sm:flex">
+                <div class="w-1/2"></div>
+                <div x-data="{ isOpen: false }" class="relative w-1/2 flex justify-end">
+                    <button @click="isOpen = !isOpen" class="realtive z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none">
+                        <img src="https://source.unsplash.com/uJ8LNVCBjFQ/400x400">
+                    </button>
+                    <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
+                    <div x-show="isOpen" class="absolute z-20 w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
+                        <a href="../my-account/show.html" class="block px-4 py-2 account-link hover:text-white">Akun saya</a>
+                        <a href="#" class="block px-4 py-2 account-link hover:text-white">Rumah</a>
+                        <a href="#" class="block px-4 py-2 account-link hover:text-white">Keluar</a>
+                    </div>
+                </div>
+            </header>
+    
+            <!-- Mobile Header & Nav -->
+            <header x-data="{ isOpen: false }" class="w-full bg-sidebar py-5 px-6 sm:hidden">
+                <div class="flex items-center justify-between">
+                    <a href="../dashboard.html" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">MI</a>
+                    <button @click="isOpen = !isOpen" class="text-white text-3xl focus:outline-none">
+                        <i x-show="!isOpen" class="fas fa-bars"></i>
+                        <i x-show="isOpen" class="fas fa-times"></i>
+                    </button>
+                </div>
+    
+                <!-- Dropdown Nav -->
+                <nav :class="isOpen ? 'flex': 'hidden'" class="flex flex-col pt-4">
+                    <a href="../dashboard.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                        <i class="fas fa-tachometer-alt mr-3"></i>
+                        Dashboard
+                    </a>
+                    <a href="../lessons/index.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                        <i class="fas fa-sticky-note mr-3"></i>
+                        Mata Pelajaran
+                    </a>
+                    <a href="./index.html" class="flex items-center active-nav-link text-white py-2 pl-4 nav-item">
+                        <i class="fas fa-table mr-3"></i>
+                        Jadwal Pelajaran
+                    </a>
+                    <a href="../roles/index.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                        <i class="fas fa-align-left mr-3"></i>
+                        Rol
+                    </a>
+                    <a href="../users/index.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                        <i class="fas fa-user mr-3"></i>
+                        Pengguna
+                    </a>
+                    <a href="calendar.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                        <i class="fas fa-calendar mr-3"></i>
+                        Kalender
+                    </a>
+                    <a href="../my-account/show.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                        <i class="fas fa-user mr-3"></i>
+                        Akun Saya
+                    </a>
+                    <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                        <i class="fas fa-sign-out-alt mr-3"></i>
+                        Rumah
+                    </a>
+                    <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                        <i class="fas fa-sign-out-alt mr-3"></i>
+                        Keluar
+                    </a>
+                </nav>
+            </header>
+        
+            <div class="w-full h-screen overflow-x-hidden border-t flex flex-col">
+                <main class="w-full flex-grow p-6">
+                    <h1 class="text-3xl text-black pb-6">Jadwal pelajaran</h1>
+
+                    <!-- Content goes here! 😁 -->
+                    <div class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                        <div class="sm:hidden">
+                            <label for="tabs" class="sr-only">Select tab</label>
+                            <select id="tabs" class="bg-gray-50 border-0 border-b border-gray-200 text-gray-900 text-sm rounded-t-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option>Senin</option>
+                                <option>Selasa</option>
+                                <option>Rabu</option>
+                                <option>Kamis</option>
+                                <option>Jum'at</option>
+                                <option>Sabtu</option>
+                                <option>Minggu</option>
+                            </select>
+                        </div>
+                        <ul class="hidden text-sm font-medium text-center text-gray-500 divide-x divide-gray-200 rounded-lg sm:flex dark:divide-gray-600 dark:text-gray-400" id="fullWidthTab" data-tabs-toggle="#fullWidthTabContent" role="tablist">
+                            <li class="w-full">
+                                <button id="senin-tab" data-tabs-target="#senin" type="button" role="tab" aria-controls="senin" aria-selected="true" class="inline-block w-full p-4 rounded-tl-lg bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Senin</button>
+                            </li>
+                            <li class="w-full">
+                                <button id="selasa-tab" data-tabs-target="#selasa" type="button" role="tab" aria-controls="selasa" aria-selected="false" class="inline-block w-full p-4 bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Selasa</button>
+                            </li>
+                            <li class="w-full">
+                                <button id="rabu-tab" data-tabs-target="#rabu" type="button" role="tab" aria-controls="rabu" aria-selected="false" class="inline-block w-full p-4 rounded-tr-lg bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Rabu</button>
+                            </li>
+                            <li class="w-full">
+                                <button id="kamis-tab" data-tabs-target="#kamis" type="button" role="tab" aria-controls="kamis" aria-selected="false" class="inline-block w-full p-4 rounded-tr-lg bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Kamis</button>
+                            </li>
+                            <li class="w-full">
+                                <button id="jumat-tab" data-tabs-target="#jumat" type="button" role="tab" aria-controls="jumat" aria-selected="false" class="inline-block w-full p-4 rounded-tr-lg bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Jum'at</button>
+                            </li>
+                            <li class="w-full">
+                                <button id="sabtu-tab" data-tabs-target="#sabtu" type="button" role="tab" aria-controls="sabtu" aria-selected="false" class="inline-block w-full p-4 rounded-tr-lg bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Sabtu</button>
+                            </li>
+                            <li class="w-full">
+                                <button id="minggu-tab" data-tabs-target="#minggu" type="button" role="tab" aria-controls="minggu" aria-selected="false" class="inline-block w-full p-4 rounded-tr-lg bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Minggu</button>
+                            </li>
+                        </ul>
+                        <div id="fullWidthTabContent" class="border-t border-gray-200 dark:border-gray-600">
+                            <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="senin" role="tabpanel" aria-labelledby="senin-tab">                                                                
+                                <div class="relative overflow-x-auto">
+                                    <div class="flex justify-end mb-4">
+                                        <a href="edit.html" class="mr-2 text-white bg-yellow-500 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">Edit&nbsp;&nbsp;<i class="fa fa-edit"></i></a>
+                                        <a href="create.html" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Tambah jadwal <i class="ml-2 fa fa-plus"></i></a>
+                                    </div>
+                                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Jam ke
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Nama pelajaran
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Pengajar
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Waktu
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Aksi
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    1
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    Matematika
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    Hudzaifah
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    07.00 - 08.00
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <form action="#" method="post">
+                                                        <button class="bg-red-500 rounded p-2 text-white" type="submit"><i class="fa fa-trash"></i></button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    2
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    IPA
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    Hudzaifah
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    08.00 - 09.00
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <form action="#" method="post">
+                                                        <button class="bg-red-500 rounded p-2 text-white" type="submit"><i class="fa fa-trash"></i></button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="selasa" role="tabpanel" aria-labelledby="selasa-tab">                                                                
+                                <div class="relative overflow-x-auto">
+                                    <div class="flex justify-end mb-4">
+                                        <a href="edit.html" class="mr-2 text-white bg-yellow-500 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">Edit&nbsp;&nbsp;<i class="fa fa-edit"></i></a>
+                                        <a href="create.html" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Tambah jadwal <i class="ml-2 fa fa-plus"></i></a>
+                                    </div>
+                                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Jam ke
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Nama pelajaran
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Pengajar
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Waktu
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Aksi
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    1
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    Matematika
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    Hudzaifah
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    09.00 - 10.00
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <form action="#" method="post">
+                                                        <button class="bg-red-500 rounded p-2 text-white" type="submit"><i class="fa fa-trash"></i></button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="rabu" role="tabpanel" aria-labelledby="rabu-tab">                                                                
+                                <div class="relative overflow-x-auto">
+                                    <div class="flex justify-end mb-4">
+                                        <a href="edit.html" class="mr-2 text-white bg-yellow-500 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">Edit&nbsp;&nbsp;<i class="fa fa-edit"></i></a>
+                                        <a href="create.html" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Tambah jadwal <i class="ml-2 fa fa-plus"></i></a>
+                                    </div>
+                                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Jam ke
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Nama pelajaran
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Pengajar
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Waktu
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Aksi
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    1
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    Matematika
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    Hudzaifah
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    08.00 - 10.00
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <form action="#" method="post">
+                                                        <button class="bg-red-500 rounded p-2 text-white" type="submit"><i class="fa fa-trash"></i></button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="kamis" role="tabpanel" aria-labelledby="kamis-tab">                                                                
+                                <div class="relative overflow-x-auto">
+                                    <div class="flex justify-end mb-4">
+                                        <a href="edit.html" class="mr-2 text-white bg-yellow-500 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">Edit&nbsp;&nbsp;<i class="fa fa-edit"></i></a>
+                                        <a href="create.html" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Tambah jadwal <i class="ml-2 fa fa-plus"></i></a>
+                                    </div>
+                                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Jam ke
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Nama pelajaran
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Pengajar
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Waktu
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Aksi
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    1
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    Matematika
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    Hudzaifah
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    10.00 - 11.00
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <form action="#" method="post">
+                                                        <button class="bg-red-500 rounded p-2 text-white" type="submit"><i class="fa fa-trash"></i></button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="jumat" role="tabpanel" aria-labelledby="jumat-tab">                                                                
+                                <div class="relative overflow-x-auto">
+                                    <div class="flex justify-end mb-4">
+                                        <a href="edit.html" class="mr-2 text-white bg-yellow-500 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">Edit&nbsp;&nbsp;<i class="fa fa-edit"></i></a>
+                                        <a href="create.html" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Tambah jadwal <i class="ml-2 fa fa-plus"></i></a>
+                                    </div>
+                                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Jam ke
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Nama pelajaran
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Pengajar
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Waktu
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Aksi
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    1
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    Matematika
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    Hudzaifah
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    07.00 - 08.00
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <form action="#" method="post">
+                                                        <button class="bg-red-500 rounded p-2 text-white" type="submit"><i class="fa fa-trash"></i></button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="sabtu" role="tabpanel" aria-labelledby="sabtu-tab">                                                                
+                                <div class="relative overflow-x-auto">
+                                    <div class="flex justify-end mb-4">
+                                        <a href="edit.html" class="mr-2 text-white bg-yellow-500 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">Edit&nbsp;&nbsp;<i class="fa fa-edit"></i></a>
+                                        <a href="create.html" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Tambah jadwal <i class="ml-2 fa fa-plus"></i></a>
+                                    </div>
+                                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Jam ke
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Nama pelajaran
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Pengajar
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Waktu
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Aksi
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    1
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    Matematika
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    Hudzaifah
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    08.00 - 07.00
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <form action="#" method="post">
+                                                        <button class="bg-red-500 rounded p-2 text-white" type="submit"><i class="fa fa-trash"></i></button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="minggu" role="tabpanel" aria-labelledby="minggu-tab">                                                                
+                                <div class="relative overflow-x-auto">
+                                    <div class="flex justify-end mb-4">
+                                        <a href="edit.html" class="mr-2 text-white bg-yellow-500 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">Edit&nbsp;&nbsp;<i class="fa fa-edit"></i></a>
+                                        <a href="create.html" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Tambah jadwal <i class="ml-2 fa fa-plus"></i></a>
+                                    </div>
+                                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Jam ke
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Nama pelajaran
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Pengajar
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Waktu
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Aksi
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    1
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    Matematika
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    Hudzaifah
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    10.00 - 12.00
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <form action="#" method="post">
+                                                        <button class="bg-red-500 rounded p-2 text-white" type="submit"><i class="fa fa-trash"></i></button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+        
+                <footer class="w-full bg-white text-right p-4">
+                    Built by <a target="_blank" href="https://davidgrzyb.com" class="underline">David Grzyb</a>.
+                </footer>
+            </div>
+            
+        </div>
+
+        <!-- Flowbite -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js"></script>
+        <!-- AlpineJS -->
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+        <!-- Font Awesome -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+    </body>
+</html>
